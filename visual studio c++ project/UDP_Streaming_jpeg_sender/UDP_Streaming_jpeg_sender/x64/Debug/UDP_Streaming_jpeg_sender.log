@@ -1,0 +1,6 @@
+﻿  SenderSocket.cpp
+c:\workspace\opencv-examples\cpp\socket_streaming\streaming_jpeg_sender\streaming_jpeg_sender\sendersocket.cpp(29): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+c:\workspace\opencv-examples\cpp\socket_streaming\streaming_jpeg_sender\streaming_jpeg_sender\sendersocket.cpp(36): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
+c:\workspace\opencv-examples\cpp\socket_streaming\streaming_jpeg_sender\streaming_jpeg_sender\sendersocket.cpp(37): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
+  UDP_Streaming_jpeg_sender.vcxproj -> C:\workspace\opencv-examples\cpp\socket_streaming\UDP_Streaming_jpeg_sender\x64\Debug\UDP_Streaming_jpeg_sender.exe
+  UDP_Streaming_jpeg_sender.vcxproj -> C:\workspace\opencv-examples\cpp\socket_streaming\UDP_Streaming_jpeg_sender\x64\Debug\UDP_Streaming_jpeg_sender.pdb (Full PDB)
