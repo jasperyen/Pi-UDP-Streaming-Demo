@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JpegEncoder.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SenderSocket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="JpegEncoder.h" />
+    <ClInclude Include="SenderSocket.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1FBDD252-649A-4B30-81D6-AAF7207E1EC6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -143,15 +152,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Streaming_jpeg_sender\Streaming_jpeg_sender\JpegEncoder.cpp" />
-    <ClCompile Include="..\..\Streaming_jpeg_sender\Streaming_jpeg_sender\main.cpp" />
-    <ClCompile Include="..\..\Streaming_jpeg_sender\Streaming_jpeg_sender\SenderSocket.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Streaming_jpeg_sender\Streaming_jpeg_sender\JpegEncoder.h" />
-    <ClInclude Include="..\..\Streaming_jpeg_sender\Streaming_jpeg_sender\SenderSocket.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
