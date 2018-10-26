@@ -1,10 +1,7 @@
-#pragma once
+#include "header.h"
 
-#include <stdio.h>
-#include <iostream>
-#include <queue>
-#include <thread>
-#include <mutex>
+#ifndef JPEGENCODER_H
+#define JPEGENCODER_H
 
 #include <turbojpeg.h>
 
@@ -29,3 +26,5 @@ public:
 	bool encodeRGB(const unsigned char*, vector<unsigned char>&);
 	bool encodeBGR(const unsigned char*, vector<unsigned char>&);
 };
+
+#endif

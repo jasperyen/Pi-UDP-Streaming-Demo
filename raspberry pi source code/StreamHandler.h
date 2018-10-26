@@ -1,6 +1,13 @@
-#pragma once
+#include "header.h"
+#include "JpegEncoder.h"
 
-#include <stdio.h>
+#ifndef STREAMHANDLER_H
+#define STREAMHANDLER_H
+
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,19 +16,10 @@
 #include <errno.h> // solve "errno" not declared problem
 #include <unistd.h> // solve "close" not declared problem
 
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <thread>
-#include <algorithm>
-#include <time.h>
-
-#include "JpegEncoder.h"
-
 #define MAX_QUEUE_SZIE 3
 
 using namespace std;
+namespace py = pybind11;
 
 class StreamHandler {
 
@@ -49,4 +47,9 @@ public:
 	bool sendYUVImage(const unsigned char*);
 	bool sendBGRImage(const unsigned char*);
 	bool sendRGBImage(const unsigned char*);
+   bool sendYUVImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
+   bool sendBGRImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
+   bool sendRGBImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
 };
+
+#endif

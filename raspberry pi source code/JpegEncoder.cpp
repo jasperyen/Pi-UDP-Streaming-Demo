@@ -1,3 +1,4 @@
+#include "header.h"
 #include "JpegEncoder.h"
 
 JpegEncoder::JpegEncoder(const int w, const int h, const int qua) {
@@ -36,7 +37,7 @@ bool JpegEncoder::encodeRGB(const unsigned char *raw_data,
 	unsigned char *tjdata = NULL;
 	unsigned long tjsize = 0;
 
-	int ret = tjCompress2(handle, raw_data, width, 0, height, bgrFormat,
+	int ret = tjCompress2(handle, raw_data, width, 0, height, rgbFormat,
 									&tjdata, &tjsize, TJSAMP_420, quality, tjflag);
 	if (ret < 0) {
 		printf("compressor instance : %p\n", handle);
@@ -54,7 +55,7 @@ bool JpegEncoder::encodeBGR(const unsigned char *raw_data,
 	unsigned char *tjdata = NULL;
 	unsigned long tjsize = 0;
 
-	int ret = tjCompress2(handle, raw_data, width, 0, height, rgbFormat,
+	int ret = tjCompress2(handle, raw_data, width, 0, height, bgrFormat,
 									&tjdata, &tjsize, TJSAMP_420, quality, tjflag);
 	if (ret < 0) {
 		printf("compressor instance : %p\n", handle);

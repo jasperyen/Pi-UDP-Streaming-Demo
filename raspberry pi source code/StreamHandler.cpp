@@ -1,3 +1,4 @@
+#include "header.h"
 #include "StreamHandler.h"
 
 StreamHandler::StreamHandler(const int width, const int height, const int quality,
@@ -73,6 +74,18 @@ bool StreamHandler::sendRGBImage(const unsigned char *image) {
    return true;
 }
 
+bool StreamHandler::sendBGRImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
+   return sendBGRImage(array.data());
+}
+
+bool StreamHandler::sendRGBImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
+   return sendRGBImage(array.data());
+}
+
+bool StreamHandler::sendYUVImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
+   return sendYUVImage(array.data());
+}
+
 void StreamHandler::sendingLoop() {
    vector<unsigned char> data;
 
@@ -89,7 +102,7 @@ void StreamHandler::sendingLoop() {
 
 void StreamHandler::sendPacket(vector<unsigned char> &data) {
    int package_tag = rand();
-	int package_index = ++packageCount;
+	//int package_index = ++packageCount;
 	int data_size = data.size();
    int package_length = data_size / available_size + 1;
 	int data_shift = 0;
@@ -117,10 +130,10 @@ void StreamHandler::sendPacket(vector<unsigned char> &data) {
 		memcpy(ptr, data.data() + data_shift, send_size);
 
       //cout << "send " << i << " - " << data_shift << " - " << send_size << endl;
+		//int sendbytes =
+      sendto(sConnect, reinterpret_cast<char*>(package_data.data()),
+					send_size + 4 * sizeof(int), 0, (struct sockaddr *)&addr, sizeof(addr));
 
-		int sendbytes = sendto(sConnect, reinterpret_cast<char*>(package_data.data()),
-											send_size + 4 * sizeof(int),
-												0, (struct sockaddr *)&addr, sizeof(addr));
 		data_shift += available_size;
 	}
 }
