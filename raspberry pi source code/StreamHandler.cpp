@@ -3,26 +3,43 @@
 
 StreamHandler::StreamHandler(const int width, const int height, const int quality,
                            const string &ip, const int port, const int package_size) {
-
-   cout << "Connect to : " << ip << ":" << port << endl;
-   sConnect = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-
-   if (sConnect == -1) {
-     cout << "Could not create socket : " << strerror(errno) << endl;
-     return;
-   }
+   createConnection(ip, port, sConnect_1, addr_1);
 
    this->package_size = package_size;
    available_size = package_size - 4 * sizeof(int);
+
+   encoder = new JpegEncoder(width, height, quality);
+   sending_thread = new thread(&StreamHandler::sendingLoop, this);
+}
+
+StreamHandler::StreamHandler(const int width, const int height, const int quality,
+                           const string &ip_1, const int port_1,
+                           const string &ip_2, const int port_2, const int package_size) {
+   createConnection(ip_1, port_1, sConnect_1, addr_1);
+   createConnection(ip_2, port_2, sConnect_2, addr_2);
+
+   this->package_size = package_size;
+   available_size = package_size - 4 * sizeof(int);
+
+   encoder = new JpegEncoder(width, height, quality);
+   sending_thread = new thread(&StreamHandler::sendingLoop, this);
+}
+
+
+void StreamHandler::createConnection(const string &ip, const int port, int &sConnect, struct sockaddr_in &addr) {
+
+   cout << "Connect to : " << ip << ":" << port << endl;
+   sConnect = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+   if (sConnect == -1) {
+     cout << "Could not create socket : " << strerror(errno) << endl;
+     exit(-1);
+   }
 
    memset(&addr, 0, sizeof(addr));
    addr.sin_family = AF_INET;
    addr.sin_port = htons(port);
    addr.sin_addr.s_addr = inet_addr(ip.c_str());
    srand(time(NULL));
-
-   encoder = new JpegEncoder(width, height, quality);
-   sending_thread = new thread(&StreamHandler::sendingLoop, this);
 }
 
 bool StreamHandler::popJpegData(vector<unsigned char> &data) {
@@ -88,6 +105,7 @@ bool StreamHandler::sendYUVImagePy(py::array_t<uint8_t, py::array::c_style | py:
 
 void StreamHandler::sendingLoop() {
    vector<unsigned char> data;
+   bool second_addr = (sConnect_2 != -1);
 
    while (true) {
       while (!popJpegData(data)) {
@@ -96,11 +114,13 @@ void StreamHandler::sendingLoop() {
 		}
 		//imshow("data", imdecode(data, CV_LOAD_IMAGE_COLOR));
 		//waitKey(1);
-		sendPacket(data);
+		sendPacket(data, sConnect_1, addr_1);
+      if(second_addr)
+         sendPacket(data, sConnect_2, addr_2);
    }
 }
 
-void StreamHandler::sendPacket(vector<unsigned char> &data) {
+void StreamHandler::sendPacket(vector<unsigned char> &data, int sConnect, struct sockaddr_in &addr) {
    int package_tag = rand();
 	//int package_index = ++packageCount;
 	int data_size = data.size();

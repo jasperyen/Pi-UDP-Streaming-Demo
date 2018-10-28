@@ -7,7 +7,8 @@ CFLAGS = -std=c++14 -O3 -Wall
 # libjpeg-turbo
 # -I/opt/libjpeg-turbo/include -L/opt/libjpeg-turbo/lib32  -lturbojpeg
 
-INCLS = -I/opt/libjpeg-turbo/include `python3 -m pybind11 --includes`
+#INCLS = -I/opt/libjpeg-turbo/include `python3 -m pybind11 --includes`
+INCLS = -I/opt/libjpeg-turbo/include -I/usr/include/python3.5m
 LDLIBS = -pthread -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util -lturbojpeg -L/opt/vc/lib -L/opt/libjpeg-turbo/lib32
 PYSUFFIX = `python3-config --extension-suffix`
 PYLDFLAGS = -fPIC -shared

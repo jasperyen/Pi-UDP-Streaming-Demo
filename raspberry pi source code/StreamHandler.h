@@ -25,8 +25,10 @@ class StreamHandler {
 
 private:
 	//	socket param
-	int sConnect;
-	struct sockaddr_in addr;
+	int sConnect_1 = -1;
+	struct sockaddr_in addr_1;
+	int sConnect_2 = -1;
+	struct sockaddr_in addr_2;
 	int packageCount = 0;
 	int package_size;
 	int available_size;
@@ -37,13 +39,15 @@ private:
 	mutex queue_mutex;
 	queue<shared_ptr<vector<unsigned char>>> jpeg_queue;
 
+	void createConnection(const string&, const int, int&, struct sockaddr_in&);
 	bool popJpegData(vector<unsigned char>&);
 	void pushJpegData(const shared_ptr<vector<unsigned char>>&);
 	void sendingLoop();
-	void sendPacket(vector<unsigned char>&);
+	void sendPacket(vector<unsigned char>&, int, struct sockaddr_in&);
 
 public:
 	StreamHandler(const int, const int, const int, const string&, const int, const int);
+	StreamHandler(const int, const int, const int, const string&, const int, const string&, const int, const int);
 	bool sendYUVImage(const unsigned char*);
 	bool sendBGRImage(const unsigned char*);
 	bool sendRGBImage(const unsigned char*);

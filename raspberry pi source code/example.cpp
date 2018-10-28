@@ -12,7 +12,8 @@ int main() {
 	//raspicam::RASPICAM_FORMAT format = raspicam::RASPICAM_FORMAT_BGR;
 	//raspicam::RASPICAM_FORMAT format = raspicam::RASPICAM_FORMAT_RGB;
 
-	StreamHandler sender(width, height, quality, "192.168.3.103", 17788, 65000);
+	//StreamHandler sender(width, height, quality, "192.168.3.103", 17788, 65000);
+	StreamHandler sender(width, height, quality, "192.168.3.103", 17788, "192.168.3.100", 17788, 65000);
 
 	raspicam::RaspiCam capture;
 	capture.setFormat(format);
