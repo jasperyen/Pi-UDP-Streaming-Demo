@@ -4,7 +4,7 @@
 > JPEG 壓縮函式庫  
 > 移至 /usr/lib/libturbojpeg.so.0
 
-#### py_stream_handler.cpython-35m-arm-linux-gnueabihf.so
+#### py_handler.cpython-35m-arm-linux-gnueabihf.so
 > UDP 影像串流函式庫  
 > 移至 python 代碼相同目錄
 
@@ -14,14 +14,15 @@
 ```
 import cv2
 import numpy as np
-import py_stream_handler
+import py_handler
 
 cap = cv2.VideoCapture(0)
 width = cap.get(3)
 height = cap.get(4)
 
 # StreamHandler( <width>, <height>, <jpeg quality>, <ip>, <port>, <package size> )
-sender = py_stream_handler.StreamHandler(width, height, 60, "192.168.1.1", 17788, 65000)
+sender = py_handler.PyStreamHandler(width, height, 60, "192.168.3.103", 17788, 65000)
+# sender = py_handler.PyStreamHandler(width, height, 60, "192.168.3.103", 17788, "192.168.3.100", 17788, 65000)
 
 while(True):
     ret, frame = cap.read()
