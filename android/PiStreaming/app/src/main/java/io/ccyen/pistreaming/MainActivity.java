@@ -1,18 +1,22 @@
 package io.ccyen.pistreaming;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -22,15 +26,16 @@ import java.nio.ByteBuffer;
 public class MainActivity extends Activity {
 
     private final String[] settingOption = {"bind port", "scale type"};
-    private final String[] scaleType = {"crop", "center", "fit"};
+    private final String[] scaleType = {"crop", "center", "fit", "VR"};
 
     private FloatingActionButton settingBtn;
     private View view;
-    private ImageView imageView;
+    private ImageView imageView, imageViewLeft, imageViewRight;
+    private LinearLayout VRLayout;
     private ImageViewHandler viewHandler;
     private UDPStreamingReceiver receiver;
     private boolean isStreaming = false;
-
+    private boolean isVRMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +45,18 @@ public class MainActivity extends Activity {
 
         settingBtn = findViewById(R.id.settingButton);
         imageView = findViewById(R.id.imageView);
+        imageViewLeft = findViewById(R.id.imageViewLeft);
+        imageViewRight = findViewById(R.id.imageViewRight);
+        VRLayout = findViewById(R.id.VRLayout);
 
-        //imageView.setScaleType(ImageView.ScaleType. CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType. CENTER_CROP);
         //imageView.setScaleType(ImageView.ScaleType. FIT_CENTER);
-        imageView.setScaleType(ImageView.ScaleType. FIT_XY);
+        //imageView.setScaleType(ImageView.ScaleType. FIT_XY);
 
-        if (!isStreaming)
-            startStreaming(17788);
+        imageViewLeft.setScaleType(ImageView.ScaleType. CENTER_CROP);
+        imageViewRight.setScaleType(ImageView.ScaleType. CENTER_CROP);
+
+        imageView.bringToFront();
 
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +64,9 @@ public class MainActivity extends Activity {
                 showSettingDialog();
             }
         });
+
+        if (!isStreaming)
+            startStreaming(17788);
     }
 
     private void showSettingDialog () {
@@ -75,6 +88,7 @@ public class MainActivity extends Activity {
         final EditText editText = new EditText(this);
         Dialog dialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
+                .setMessage("port")
                 .setView(editText)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -94,6 +108,28 @@ public class MainActivity extends Activity {
     }
 
     private void changeScaleType (int type) {
+
+        switch (type) {
+            case 0 :
+            case 1 :
+            case 2 :
+                if (isVRMode) {
+                    imageView.bringToFront();
+                    imageViewRight.setAlpha(0f);
+                    imageViewLeft.setAlpha(0f);
+                }
+                isVRMode = false;
+                break;
+            case 3 :
+                if (!isVRMode) {
+                    VRLayout.bringToFront();
+                    imageViewRight.setAlpha(1f);
+                    imageViewLeft.setAlpha(1f);
+                }
+                isVRMode = true;
+                break;
+        }
+
         switch (type) {
             case 0 :
                 imageView.setScaleType(ImageView.ScaleType. CENTER_CROP);
@@ -133,21 +169,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-    }
-
     private void startStreaming(int port) {
         try {
             receiver = new UDPStreamingReceiver(port);
@@ -182,7 +203,12 @@ public class MainActivity extends Activity {
                 }
 
                 bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(buffer.array()));
-                runOnUiThread(new BitmapUpdater(imageView, bitmap));
+                if (!isVRMode)
+                    runOnUiThread(new BitmapUpdater(imageView, bitmap));
+                else{
+                    runOnUiThread(new BitmapUpdater(imageViewLeft, bitmap));
+                    runOnUiThread(new BitmapUpdater(imageViewRight, bitmap));
+                }
             }
         }
     }
@@ -199,6 +225,21 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
             imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 }

@@ -21,4 +21,25 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:src="@drawable/ic_launcher_foreground" />
+
+    <LinearLayout
+        android:id="@+id/VRLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewLeft"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_launcher_foreground" />
+
+        <ImageView
+            android:id="@+id/imageViewRight"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_launcher_foreground" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
