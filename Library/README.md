@@ -17,8 +17,9 @@ import numpy as np
 import py_handler
 
 cap = cv2.VideoCapture(0)
-width = cap.get(3)
-height = cap.get(4)
+
+width = int(cap.get(3))
+height = int(cap.get(4))
 
 # StreamHandler( <width>, <height>, <jpeg quality>, <ip>, <port>, <package size> )
 sender = py_handler.PyStreamHandler(width, height, 60, "192.168.3.103", 17788, 65000)
@@ -27,5 +28,5 @@ sender = py_handler.PyStreamHandler(width, height, 60, "192.168.3.103", 17788, 6
 while(True):
     ret, frame = cap.read()
     sender.sendBGRImage(frame)
-
+    
 ```
