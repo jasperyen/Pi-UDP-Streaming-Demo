@@ -1,6 +1,6 @@
-## 環境說明
+## 环境说明
 
-#### 相依函式庫
+#### 相依库
 > OpenCV-3.4.3 [https://github.com/opencv/opencv](https://github.com/opencv/opencv)
 >
 > raspicam [https://github.com/cedricve/raspicam](https://github.com/cedricve/raspicam)
@@ -10,7 +10,7 @@
 > pybind11-2.2.4 [https://github.com/pybind/pybind11](https://github.com/pybind/pybind11)
 
 #### Dockerfile
-包含所有編譯所需環境 :
+包含所有编译所需环境 :
 [Dockerfile](https://github.com/jasperyen/Pi-UDP-Streaming-Demo/blob/master/raspberry%20pi%20source%20code/docker/Dockerfile)
 
 ```
