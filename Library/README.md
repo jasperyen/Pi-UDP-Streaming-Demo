@@ -1,16 +1,16 @@
-### 函式庫說明
+### 使用说明
 
 #### libturbojpeg.so.o
-> JPEG 壓縮函式庫  
+> JPEG 压缩库  
 > 移至 /usr/lib/libturbojpeg.so.0
 
 #### py_handler.cpython-35m-arm-linux-gnueabihf.so
-> UDP 影像串流函式庫  
-> 移至 python 代碼相同目錄
+> UDP 影像串流库  
+> 移至 python 代码相同目录
 
 ---
 
-### Python 範例代碼
+### Python 范例代码
 ```
 import cv2
 import numpy as np
