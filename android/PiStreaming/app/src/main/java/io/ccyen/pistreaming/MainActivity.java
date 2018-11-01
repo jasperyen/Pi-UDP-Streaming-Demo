@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
     private UDPStreamingReceiver receiver;
     private boolean isStreaming = false;
     private boolean isVRMode = false;
+    private int defaultPort = 17788;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +66,30 @@ public class MainActivity extends Activity {
             }
         });
 
+        viewHandler = new ImageViewHandler();
+        viewHandler.start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Toast.makeText(this, "onStart", Toast.LENGTH_LONG).show();
+
         if (!isStreaming)
-            startStreaming(17788);
+            startStreaming(defaultPort);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
+
+        if (isStreaming) {
+            try {
+                receiver.close();
+            } catch (InterruptedException e) {}
+            isStreaming = false;
+        }
     }
 
     private void showSettingDialog () {
@@ -172,9 +195,7 @@ public class MainActivity extends Activity {
     private void startStreaming(int port) {
         try {
             receiver = new UDPStreamingReceiver(port);
-            viewHandler = new ImageViewHandler();
             receiver.start();
-            viewHandler.start();
 
             isStreaming = true;
             Log.i("startStreaming", "bind port on " + port);
@@ -195,9 +216,9 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
             while (keepRunning) {
-                if ((buffer = receiver.getData()) == null) {
+                if (receiver == null || (buffer = receiver.getData()) == null) {
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(30);
                     } catch (InterruptedException e) {}
                     continue;
                 }

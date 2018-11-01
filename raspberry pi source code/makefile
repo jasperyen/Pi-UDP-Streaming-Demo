@@ -3,13 +3,16 @@ CC = g++
 CFLAGS = -std=c++14 -O3 -Wall
 
 # PiCamera
-# -L/opt/vc/lib -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util
+# -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util -L/opt/vc/lib
 # libjpeg-turbo
-# -I/opt/libjpeg-turbo/include -L/opt/libjpeg-turbo/lib32  -lturbojpeg
+# -I/opt/libjpeg-turbo/include -L/opt/libjpeg-turbo/lib32
 
 #INCLS = -I/opt/libjpeg-turbo/include `python3 -m pybind11 --includes`
 INCLS = -I/opt/libjpeg-turbo/include -I/usr/include/python3.5m
-LDLIBS = -pthread -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util -lturbojpeg -L/opt/vc/lib -L/opt/libjpeg-turbo/lib32
+
+LDLIBS = -pthread -lturbojpeg -L/opt/libjpeg-turbo/lib32
+LDCAMLIBS = -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util -L/opt/vc/lib
+
 PYSUFFIX = `python3-config --extension-suffix`
 PYLDFLAGS = -fPIC -shared
 
@@ -26,7 +29,7 @@ $(PCH_OUT) : $(PCH_HEADER)
 
 
 cpp_example : example.o JpegEncoder.o StreamHandler.o
-	$(CC) -o $@ $^ $(LDLIBS)
+	$(CC) -o $@ $^ $(LDLIBS) $(LDCAMLIBS)
 
 py_handler : PyInterface.o JpegEncoder.o StreamHandler.o
 	$(CC) -o $@$(PYSUFFIX) $^ $(LDLIBS) $(PYLDFLAGS)

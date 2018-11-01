@@ -58,7 +58,7 @@ bool StreamHandler::popJpegData(vector<unsigned char> &data) {
 void StreamHandler::pushJpegData(const shared_ptr<vector<unsigned char>> &data_ptr) {
    unique_lock<mutex> locker(queue_mutex);
    if (jpeg_queue.size() > MAX_QUEUE_SZIE){
-      cout << "loss jpeg data" << endl;
+      //cout << "loss jpeg data" << endl;
       jpeg_queue.pop();
    }
    jpeg_queue.push(data_ptr);
