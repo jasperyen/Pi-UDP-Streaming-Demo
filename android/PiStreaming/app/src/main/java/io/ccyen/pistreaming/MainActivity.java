@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +26,7 @@ import java.nio.ByteBuffer;
 
 public class MainActivity extends Activity {
 
-    private final String[] settingOption = {"bind port", "scale type"};
+    private final String[] settingOption = {"bind port", "scale type", "vr dist"};
     private final String[] scaleType = {"crop", "center", "fit", "VR"};
 
     private FloatingActionButton settingBtn;
@@ -37,12 +38,14 @@ public class MainActivity extends Activity {
     private boolean isStreaming = false;
     private boolean isVRMode = false;
     private int defaultPort = 17788;
+    private int vrDist = 170;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         view = findViewById(android.R.id.content);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         settingBtn = findViewById(R.id.settingButton);
         imageView = findViewById(R.id.imageView);
@@ -102,6 +105,9 @@ public class MainActivity extends Activity {
                     case 1 :
                         showScaleDialog();
                         break;
+                    case 2 :
+                        showChangeVRDialog();
+                        break;
                 }
             }
         }).show();
@@ -117,6 +123,26 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         changeBindPort(editText.getText().toString());
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    private void showChangeVRDialog () {
+        final EditText editText = new EditText(this);
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setMessage("dist")
+                .setView(editText)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int dist = -1;
+                        try {
+                            dist = Integer.parseInt(editText.getText().toString());
+                        } catch(Exception e){}
+                        if(dist > -1)
+                            vrDist = dist;
                     }
                 }).create();
         dialog.show();
@@ -227,8 +253,11 @@ public class MainActivity extends Activity {
                 if (!isVRMode)
                     runOnUiThread(new BitmapUpdater(imageView, bitmap));
                 else{
-                    runOnUiThread(new BitmapUpdater(imageViewLeft, bitmap));
-                    runOnUiThread(new BitmapUpdater(imageViewRight, bitmap));
+                    Bitmap bitmapLeft = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth() - vrDist, bitmap.getHeight());
+                    Bitmap bitmapRight = Bitmap.createBitmap(bitmap, 0 + vrDist, 0, bitmap.getWidth() - vrDist, bitmap.getHeight());
+
+                    runOnUiThread(new BitmapUpdater(imageViewLeft, bitmapLeft));
+                    runOnUiThread(new BitmapUpdater(imageViewRight, bitmapRight));
                 }
             }
         }
