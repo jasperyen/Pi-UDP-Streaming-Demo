@@ -31,12 +31,22 @@ RUN apt-get update \
 	&& ln -s /opt/libjpeg-turbo/lib32/libturbojpeg.so.0.1.0 /usr/lib/libturbojpeg.so.0 \
 # install pybind11
 	&& cd /tmp \
+	&& pip install pytest \
+	&& pip install pybind11 \
 	&& pip3 install pytest \
+	&& pip3 install pybind11 \
 	&& wget -c -N -nv -O pybind11-2.2.4.tar.gz https://codeload.github.com/pybind/pybind11/tar.gz/v2.2.4 \
 	&& tar -zxvf pybind11-2.2.4.tar.gz \
 	&& cd pybind11-2.2.4 \
 	&& mkdir build \
 	&& cd build \
+#	build python2
+	&& cmake -DPYBIND11_PYTHON_VERSION=2.7 .. \
+	&& make -j3 \
+	&& make install \
+	&& ldconfig \
+	&& rm -rf * \
+#	build python3
 	&& cmake -DPYBIND11_PYTHON_VERSION=3.5 .. \
 	&& make -j3 \
 	&& make install \

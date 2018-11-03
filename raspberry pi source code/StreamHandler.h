@@ -4,10 +4,6 @@
 #ifndef STREAMHANDLER_H
 #define STREAMHANDLER_H
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -19,7 +15,6 @@
 #define MAX_QUEUE_SZIE 3
 
 using namespace std;
-namespace py = pybind11;
 
 class StreamHandler {
 
@@ -51,9 +46,6 @@ public:
 	bool sendYUVImage(const unsigned char*);
 	bool sendBGRImage(const unsigned char*);
 	bool sendRGBImage(const unsigned char*);
-   bool sendYUVImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
-   bool sendBGRImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
-   bool sendRGBImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast>);
 };
 
 #endif

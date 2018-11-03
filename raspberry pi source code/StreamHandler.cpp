@@ -91,18 +91,6 @@ bool StreamHandler::sendRGBImage(const unsigned char *image) {
    return true;
 }
 
-bool StreamHandler::sendBGRImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
-   return sendBGRImage(array.data());
-}
-
-bool StreamHandler::sendRGBImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
-   return sendRGBImage(array.data());
-}
-
-bool StreamHandler::sendYUVImagePy(py::array_t<uint8_t, py::array::c_style | py::array::forcecast> array) {
-   return sendYUVImage(array.data());
-}
-
 void StreamHandler::sendingLoop() {
    vector<unsigned char> data;
    bool second_addr = (sConnect_2 != -1);
