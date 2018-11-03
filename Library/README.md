@@ -4,8 +4,12 @@
 > JPEG 压缩库  
 > 移至 /usr/lib/libturbojpeg.so.0
 
+#### py_handler.so
+> python2 UDP 影像串流库  
+> 移至 python 代码相同目录
+
 #### py_handler.cpython-35m-arm-linux-gnueabihf.so
-> UDP 影像串流库  
+> python3 UDP 影像串流库  
 > 移至 python 代码相同目录
 
 ---
