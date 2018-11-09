@@ -14,6 +14,6 @@
 [Dockerfile](https://github.com/jasperyen/Pi-UDP-Streaming-Demo/blob/master/raspberry%20pi%20source%20code/docker/Dockerfile)
 
 ```
-docker run -it --device=/dev/vchiq jasper1996826/turbojpeg-pybind11:python3.5
+docker run -it --device=/dev/vchiq jasper1996826/turbojpeg-pybind11
 ```
 
