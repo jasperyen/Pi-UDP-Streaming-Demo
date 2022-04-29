@@ -1,7 +1,6 @@
 # Pi-UDP-Streaming-Demo
 
 ### 清华大学 2018-秋 嵌入式系统
-#### 助教 : 颜嘉辰  jasper1996826@gmail.com
 
 本专案实践树梅派至安卓手机端的UDP M-JPEG影像串流功能, 可将OpenCV Mat数组串流至安卓手机  
 采用C++撰写, 并提供Pyhton调用
